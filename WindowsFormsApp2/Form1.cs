@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,8 +19,8 @@ namespace WindowsFormsApp2
         private Timer myTimer = new Timer();
         private Timer myTimer1 = new Timer();
         private string res;
-        string folderName = @"C:\Users\koly8\Desktop\Список\textfile"; //Где создаем файлы
-        string filename = @"C:\Users\koly8\Desktop\11.txt"; //Файл из которого читаем
+        private string folderName = AppDomain.CurrentDomain.BaseDirectory+"textfile"; //Где создаем файлы
+        string filename = AppDomain.CurrentDomain.BaseDirectory + "11.txt"; //Файл из которого читаем
 
         public Form1()
         {
@@ -65,7 +65,8 @@ namespace WindowsFormsApp2
             }
             GetResult();
             myTimer1.Stop();
-            File.WriteAllText($@"C:\Users\koly8\Desktop\Список\textfile\{arr[count]}.txt", res+" "+ arr[count]);
+            string path = folderName +"\\"+ arr[count]+".txt";
+            File.WriteAllText(path, res+" "+ arr[count]);
             count++;
             myTimer.Enabled = true;
             myTimer.Start();
@@ -110,6 +111,11 @@ namespace WindowsFormsApp2
                     string fileName = line + ".txt";
                     arr[counter++] = int.Parse(line);
                     string pathString = Path.Combine(folderName, fileName);
+                    if (!Directory.Exists(folderName))
+                    {
+                        DirectoryInfo di = Directory.CreateDirectory(folderName);
+                    }
+
                     if (!File.Exists(pathString))
                     {
                         var h = File.Create(pathString);
